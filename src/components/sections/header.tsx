@@ -2,10 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { RiShakeHandsLine } from '@remixicon/react'
 import logo from '../../assets/images/Favicon.ico'
-import { menuList } from '../../utlits/fackData/menuList'
+// import { menuList } from '../../utlits/fackData/menuList'
 import LanguageSelector from '../sections/language/Selector';
+import { useGeneralStore } from '../../utlits/store/general.store';
+import { useMenuStore } from '../../utlits/store/menu.store';
 
 const Header = () => {
+    const { data: generalData, setData: setGeneralData } = useGeneralStore();
+    const { language } = useMenuStore();
+
     const pathName = useLocation().pathname
     const [isSticky, setisSticky] = useState(false)
     
@@ -19,6 +24,10 @@ const Header = () => {
         return () => window.removeEventListener("scroll", stickyHeader)
     }, [])
 
+    useEffect(() => {
+        setGeneralData(language);
+    }, [language, setGeneralData]);
+
     const stickyHeader = () => {
         const scrollTop = window.scrollY
         if (scrollTop > 85) {
@@ -28,6 +37,16 @@ const Header = () => {
             setisSticky(false)
         }
     }
+    const general = generalData;
+    const hire_me = general?.hire_me || "Hire Me";
+    const menuList = Object.entries(general?.navbar || []).map(([key, label], index) => ({
+        id: index + 1,
+        path: key === "home" ? "/" : `/${key}`,
+        label
+    }));;
+
+    console.log('General Data in Header:', general);
+    console.log('General Data in Navbar:', menuList);
     return (
         <header className={`main-header ${isSticky ? "fixed-header" : ""}`}>
             <div className="header-upper">
@@ -67,7 +86,7 @@ const Header = () => {
                         </div>
                         <div className="menu-btns" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                             <LanguageSelector />
-                            <Link to="/contact" className="theme-btn">Hire Me <RiShakeHandsLine size={15} /> </Link>
+                            <Link to="/contact" className="theme-btn">{hire_me} <RiShakeHandsLine size={15} /> </Link>
                         </div>
                     </div>
                 </div>
