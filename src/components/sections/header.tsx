@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { RiShakeHandsLine } from '@remixicon/react'
 import logo from '../../assets/images/Favicon.ico'
 import { menuList } from '../../utlits/fackData/menuList'
+import LanguageSelector from '../sections/language/Selector';
 
 const Header = () => {
     const pathName = useLocation().pathname
@@ -64,7 +65,8 @@ const Header = () => {
                             </nav>
 
                         </div>
-                        <div className="menu-btns">
+                        <div className="menu-btns" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                            <LanguageSelector />
                             <Link to="/contact" className="theme-btn">Hire Me <RiShakeHandsLine size={15} /> </Link>
                         </div>
                     </div>
