@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
@@ -9,9 +9,19 @@ import 'swiper/css/navigation';
 import { RiArrowLeftSLine, RiArrowRightSLine } from '@remixicon/react';
 import { testimonialsData } from '../../utlits/fackData/testimonialsData';
 import SlideUp from '../../utlits/animations/slideUp';
+import { useTestimonialStore } from '../../utlits/store/testimonials.store';
+import { useMenuStore } from '../../utlits/store/menu.store';
 
 
 const Testimonials = () => {
+    const { data: testimonialsData, setData: setTestimonialsData } = useTestimonialStore();
+    const { language } = useMenuStore();
+    
+    useEffect(() => {
+        setTestimonialsData(language);
+    }, [language, setTestimonialsData]);
+    const { title, description, testimonials } = testimonialsData;
+
     return (
         <section className="testimonials-area">
             <div className="container">
@@ -20,8 +30,8 @@ const Testimonials = () => {
                         <div className="col-xl-12 col-lg-12">
                             <SlideUp>
                                 <div className="section-title text-center">
-                                    <p>Testinomials</p>
-                                    <h2>What clients say!</h2>
+                                    <p>{title}</p>
+                                    <h2>{description}</h2>
                                 </div>
                             </SlideUp>
                         </div>
@@ -48,7 +58,7 @@ const Testimonials = () => {
                                 }
                                 modules={[Navigation]}
                             >
-                                {testimonialsData.map(({ id, name, position, review, src }) => <SwiperSlide key={id} > <Card img={src} name={name} position={position} review={review} /> </SwiperSlide>)}
+                                {testimonials.map((testimonial, index) => <SwiperSlide key={index} > <Card img={testimonial.image} name={testimonial.name} position={testimonial.role} review={testimonial.description} /> </SwiperSlide>)}
                             </Swiper>
                             <SlideUp>
                                 <div className="slider-arrows text-center pt-40">
