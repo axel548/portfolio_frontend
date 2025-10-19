@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { RiArrowRightUpLine } from '@remixicon/react'
-import { projectsData } from '../../utlits/fackData/projectData'
+// import { projectsData } from '../../utlits/fackData/projectData'
 import SlideUp from '../../utlits/animations/slideUp';
+import { useWorksStore } from '../../utlits/store/works.store';
+import { useMenuStore } from '../../utlits/store/menu.store';
 
 const animations = ['slideIn', 'fadeIn', 'scaleUp'];
 
@@ -12,6 +14,13 @@ const getRandomAnimation = () => {
 };
 
 const Portfolio = ({ className }) => {
+    const { data: worksData, setData: setWorksData } = useWorksStore();
+    const { language } = useMenuStore();
+
+    useEffect(() => {
+        setWorksData(language);
+    }, [language, setWorksData]);
+
     const [category, setCategory] = useState('All');
     const [animationClass, setAnimationClass] = useState('');
 
@@ -21,16 +30,18 @@ const Portfolio = ({ className }) => {
         setAnimationClass(randomAnimation);
     }
 
+    const projects = worksData.projects;
+    
     // ------ filter unique category
     const filteredCategory = ["All"]
-    projectsData.forEach(({ category }) => {
+    worksData.categories.forEach((category) => {
         if (!filteredCategory.includes(category)) {
             filteredCategory.push(category)
         }
     })
-    // ------ filter unique category
 
-    const filteredProjects = category === 'All' ? projectsData : projectsData.filter(image => image.category === category);
+    // ------ filter unique category
+    const filteredProjects = category === 'All' ? projects : projects.filter(project => project.categories.includes(category));
 
 
     return (
@@ -41,9 +52,8 @@ const Portfolio = ({ className }) => {
                         <div className="col-xl-12 col-lg-12">
                             <SlideUp>
                                 <div className="section-title text-center">
-                                    <h2>Works & Projects</h2>
-                                    <p>Check out some of my design projects, meticulously crafted with love and dedication,
-                                        each one reflecting the passion and soul I poured into every detail.</p>
+                                    <h2>{worksData.title}</h2>
+                                    <p>{worksData.description}</p>
                                 </div>
                             </SlideUp>
                         </div>
@@ -54,7 +64,7 @@ const Portfolio = ({ className }) => {
                         </ul>
                     </SlideUp>
                     <div className="row project-masonry-active overflow-hidden">
-                        {filteredProjects.map(({ category, id, src, title }) => <Card key={id} id={id} category={category} src={src} title={title} animationClass={animationClass} />)}
+                        {filteredProjects.map((project, index) => <Card key={index} id={index} category={category} src={project.image} title={project.title} animationClass={animationClass} />)}
 
                     </div>
                 </div>
