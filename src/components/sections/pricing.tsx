@@ -1,10 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { priceData } from '../../utlits/fackData/priceData'
 import { Link } from 'react-router-dom'
 import { RiArrowRightLine, RiShoppingBasketLine } from '@remixicon/react'
 import SlideUp from '../../utlits/animations/slideUp'
+import { usePricingStore } from '../../utlits/store/pricing.store';
+import { useMenuStore } from '../../utlits/store/menu.store';
 
 const Pricing = () => {
+    const { data: pricingData, setData: setPricingData } = usePricingStore();
+    const { language } = useMenuStore();
+
+    useEffect(() => {
+        setPricingData(language);
+    }, [language, setPricingData]);
+    const { title, description, plans } = pricingData;
+
     return (
         <section className="pricing-area">
             <div className="container">
@@ -13,14 +23,16 @@ const Pricing = () => {
                         <div className="col-xl-12 col-lg-12">
                             <SlideUp>
                                 <div className="section-title text-center">
-                                    <p>Pricing</p>
-                                    <h2>Flexible Pricing Plan</h2>
+                                    <p>{title}</p>
+                                    <h2>{description}</h2>
                                 </div>
                             </SlideUp>
                         </div>
                     </div>
                     <div className="row justify-content-center">
-                        {priceData.map(({ features, id, price, sortInfo, title }) => <Card key={id} id={id} features={features} price={price} sortInfo={sortInfo} title={title} />)}
+                        {plans.map((plan, index) => 
+                            <Card key={index} id={index} features={plan.features} price={plan.price} sortInfo={plan.description} title={plan.type} />
+                        )}
                     </div>
                 </div>
             </div>
@@ -31,7 +43,7 @@ const Pricing = () => {
 export default Pricing
 
 
-const Card = ({id, title, price, sortInfo, features }) => {
+const Card = ({ id, title, price, sortInfo, features }) => {
     return (
         <div className="col-lg-4 col-md-6">
             <SlideUp delay={id}>

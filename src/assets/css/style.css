@@ -2107,14 +2107,14 @@ ul.extra-skills li i {
 
 
 .pricing-item .pricing-header .price:before {
-    content: '$';
+    /* content: '$'; */
 }
 
 .pricing-item .pricing-header .price:after {
     font-size: 16px;
     font-weight: 400;
     color: var(--main-color);
-    content: '/Hour';
+    /* content: '/Hour'; */
 }
 
 .pricing-item .pricing-details {
