@@ -31,7 +31,7 @@ const Pricing = () => {
                     </div>
                     <div className="row justify-content-center">
                         {plans.map((plan, index) => 
-                            <Card key={index} id={index} features={plan.features} price={plan.price} sortInfo={plan.description} title={plan.type} />
+                            <Card key={index} id={index} features={plan.features} price={plan.price} sortInfo={plan.description} title={plan.type} button={plan.button} />
                         )}
                     </div>
                 </div>
@@ -43,7 +43,7 @@ const Pricing = () => {
 export default Pricing
 
 
-const Card = ({ id, title, price, sortInfo, features }) => {
+const Card = ({ id, title, price, sortInfo, features, button }) => {
     return (
         <div className="col-lg-4 col-md-6">
             <SlideUp delay={id}>
@@ -59,7 +59,7 @@ const Card = ({ id, title, price, sortInfo, features }) => {
                                 features.map(({ id, feature, unable }) => <li key={id} className={`${unable ? "unable" : ""}`}><i> <RiArrowRightLine size={14} /></i>{feature}</li>)
                             }
                         </ul>
-                        <Link to="#" className="theme-btn">Order Now <i><RiShoppingBasketLine size={16} /></i> </Link>
+                        <Link to="#" className="theme-btn">{button} <i><RiShoppingBasketLine size={16} /></i> </Link>
                     </div>
                 </div>
             </SlideUp>
